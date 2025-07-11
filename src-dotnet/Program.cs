@@ -1,5 +1,7 @@
 using System;
 using System.IO.Ports;
+using Spectre;
+using Spectre.Console;
 
 namespace TestingSerial
 {
@@ -7,10 +9,36 @@ namespace TestingSerial
 	{
 		public static void Main(string[] args)
 		{
-			SerialPort sp = new SerialPort("COM6", 115200); //"dev/ttyACM0" for example for Linux. Windows would be "COM3" or "COM8" for example
-			sp.DtrEnable = true; //must be set to true for the Pico to know to start transmiting data. If you use the serial module in Python, that module sets this automatically!
-			sp.Open(); //Open the connection
+			Go();
+		}
 
+		public static void Go()
+		{
+			AnsiConsole.MarkupLine("[bold][blue]Welcome![/][/]");
+
+			//Ask what serial port
+			AnsiConsole.WriteLine("What is the serial port of the radio receiver?");
+			AnsiConsole.WriteLine("On Windows this would be something like 'COM6' or 'COM8'");
+			AnsiConsole.WriteLine("On Linux this would be something like '/dev/ttyACM0' or '/dev/ttyUSB0'");
+			Console.WriteLine();
+			string spID = AnsiConsole.Ask<string>("Serial Port > ");
+
+			//Open
+			AnsiConsole.Markup("Opening serial port " + spID + "... ");
+			SerialPort sp = new SerialPort(spID, 115200);
+			sp.DtrEnable = true; //must be set to true for the Pico to know to start transmiting data. If you use the serial module in Python, that module sets this automatically!
+			try
+			{
+				sp.Open(); //Open the connection
+			}
+			catch (Exception ex)
+			{
+				AnsiConsole.MarkupLine("[red]Opening of serial port failed! Msg: " + ex.Message + "[/]");
+				return; //exit program.
+			}
+
+			//Infinite loop of showing the data
+			AnsiConsole.MarkupLine("[green]Port opened! Now displaying data below:[/]");
 			while (true)
 			{
 				if (sp.BytesToRead > 0) //If there are bytes to read
@@ -19,21 +47,23 @@ namespace TestingSerial
 					byte[] buffer = new byte[sp.BytesToRead];
 					sp.Read(buffer, 0, buffer.Length);
 
-					//Print as text
+					//Convert to text
 					string AsTxt = System.Text.Encoding.UTF8.GetString(buffer);
-					Console.Write(AsTxt);
-				}
-				else
-				{
-					//Can write a message here but I commented out to ensure ONLY received data is being printed to the terminal
-					//Console.WriteLine("No bytes available!");
-				}
 
-				System.Threading.Tasks.Task.Delay(1000).Wait();
+					//Print as text
+					if (AsTxt.StartsWith("{") && AsTxt.EndsWith("}")) //I developed the code on the Pico so where every actual data packet will be as JSON
+					{
+						AnsiConsole.MarkupLine("[blue][bold]" + AsTxt + "[/]");
+					}
+					else
+					{
+						AnsiConsole.MarkupLine("[gray]" + AsTxt + "[/]");
+					}
+				}
+				System.Threading.Tasks.Task.Delay(250).Wait();
 			}
-			
-			//Should close the connection at the end but that is done automatically when Ctrl+C happenss
 
+			//Should close the connection at the end but that is done automatically when Ctrl+C happenss
 		}
 	}
 }
