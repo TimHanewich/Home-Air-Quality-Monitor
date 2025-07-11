@@ -13,15 +13,13 @@ namespace TestingSerial
 
 			while (true)
 			{
-				if (sp.BytesToRead > 0)
+				if (sp.BytesToRead > 0) //If there are bytes to read
 				{
+					//Read the data 
 					byte[] buffer = new byte[sp.BytesToRead];
 					sp.Read(buffer, 0, buffer.Length);
-					foreach (byte b in buffer)
-					{
-						Console.Write(b.ToString() + ", ");
-					}
-					Console.Write(" = ");
+
+					//Print as text
 					string AsTxt = System.Text.Encoding.UTF8.GetString(buffer);
 					Console.WriteLine(AsTxt);
 				}
