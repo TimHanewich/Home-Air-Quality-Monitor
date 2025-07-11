@@ -12,7 +12,7 @@ import DataPackets
 # set up LED with fatal sequences
 print("Setting up Pico LED...")
 led = machine.Pin("LED", machine.Pin.OUT)
-led.on()
+led.on() # turn on LED during startup
 def FATAL() -> None:
     while True:
         led.on()
@@ -102,10 +102,12 @@ except Exception as ex:
 # continuously transmit data!
 print("Entering infinite transmit loop...")
 OnLoop:int = 1
+led.off() # turn off LED for a moment to confirm start up is over... it will turn back on for a minute during record + second
 time.sleep(1.0)
 while True:
 
     print("Beginning sample capture # " + str(OnLoop) + "... ")
+    led.on() # turn LED on during recording + sending of data
 
     # Capture Data: DHT22
     TemperatureF:int = 0
@@ -152,5 +154,6 @@ while True:
     # wait
     WaitTime:int = 15
     print("Waiting " + str(WaitTime) + " seconds until next cycle...")
+    led.off() # turn off LED while not recording or sending, while we wait in a downtime
     time.sleep(WaitTime)
     OnLoop = OnLoop + 1
