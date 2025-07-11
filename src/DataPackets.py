@@ -47,7 +47,6 @@ class StandardPacket:
 
         # populate ECO2
         ECO2_bytes:bytes = max(min(self.ECO2, 65535), 0).to_bytes(2, "little")
-        print("ECO2 bytes: " + str(ECO2_bytes))
         AllBits.extend(binary.byte_to_bits(ECO2_bytes[0]))
         AllBits.extend(binary.byte_to_bits(ECO2_bytes[1]))
         
