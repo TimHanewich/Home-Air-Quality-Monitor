@@ -7,7 +7,7 @@ namespace TestingSerial
 	{
 		public static void Main(string[] args)
 		{
-			SerialPort sp = new SerialPort("/dev/ttyACM0", 115200); //"dev/ttyACM0" for example for Linux. Windows would be "COM3" or "COM8" for example
+			SerialPort sp = new SerialPort("COM6", 115200); //"dev/ttyACM0" for example for Linux. Windows would be "COM3" or "COM8" for example
 			sp.DtrEnable = true; //must be set to true for the Pico to know to start transmiting data. If you use the serial module in Python, that module sets this automatically!
 			sp.Open(); //Open the connection
 
