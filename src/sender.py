@@ -137,6 +137,7 @@ while True:
 
     # transmit the data
     packet:DataPackets.StandardPacket = DataPackets.StandardPacket()
+    packet.location = 0 # set location to any value
     packet.temperature = TemperatureF
     packet.humidity = Humidity
     packet.AQI = AQI
