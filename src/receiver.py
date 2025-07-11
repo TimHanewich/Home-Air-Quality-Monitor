@@ -5,6 +5,7 @@ import machine
 import DataPackets
 import time
 import HC12
+import sys
 
 # Set up LED
 led = machine.Pin("LED", machine.Pin.OUT)
@@ -64,27 +65,10 @@ while True:
     # receive
     print("Checking for message...")
     NewData:bytes = hc12.receive()
-    if len(NewData) == 0:
-        print("No new data!")
-    else:
+    if len(NewData) > 0:
         led.on()
         print(str(len(NewData)) + " new bytes received!")
-
-        # is it a standard packet?
-        if DataPackets.is_standard_packet(NewData):
-            print("It is a StandardPacket!")
-
-            # decode it
-            sp:DataPackets.StandardPacket = DataPackets.StandardPacket()
-            sp.decode(NewData)
-
-            # print it
-            print("Temperature: " + str(sp.temperature) + ", Humidity: " + str(sp.humidity) + ", AQI: " + str(sp.AQI) + ", TVOC: " + str(sp.TVOC) + ", ECO2: " + str(sp.ECO2))
-    
-        else:
-            print("Data payload of " + str(len(NewData)) + " not recognized as an understood packet type!")
-            print("Data received: " + str(NewData))
-
+        sys.stdout.buffer.write(NewData) # transmit the raw bytes
         led.off()
 
     # wait
