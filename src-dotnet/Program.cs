@@ -12,7 +12,7 @@ namespace TestingSerial
 			sp.Open(); //Open the connection
 
 			while (true)
-			{	
+			{
 				if (sp.BytesToRead > 0)
 				{
 					byte[] buffer = new byte[sp.BytesToRead];
@@ -30,6 +30,8 @@ namespace TestingSerial
 
 				System.Threading.Tasks.Task.Delay(1000).Wait();
 			}
+			
+			//Should close the connection at the end but that is done automatically when Ctrl+C happenss
 
 		}
 	}
