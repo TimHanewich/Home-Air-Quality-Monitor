@@ -10,11 +10,15 @@ class StandardPacket:
     """Standard packet containing sensor readings"""
 
     def __init__(self):
+        self.location:int = 0 # location identifier, 0-7 (3 bits)
         self.temperature:int = 0 # temperature, 0-255 (8 bits)
         self.humidity:int = 0 # relative humidity, 0-255 (8 bits)
         self.AQI:int = 0 # air quality index, 1-5 (3 bits)
         self.TVOC:int = 0 # Total voltatile organic compounds, 0-65,535 (16 bits)
         self.ECO2:int = 0 # estimated CO2 content, 0-65,535 (16 bits)
+
+    def __str__(self):
+        return str({"location": self.location, "temperature": self.temperature, "humidity": self.humidity, "aqi": self.AQI, "tvoc": self.TVOC, "eco2": self.ECO2})
 
     def encode(self) -> bytes:
         """Encodes sensor reading package as a raw data package."""
@@ -24,6 +28,13 @@ class StandardPacket:
 
         # populate it
         AllBits.append(False) # first bit is 0 for standard packet, which this is
+
+        # populate location bits
+        LocationToUse:int = min(max(self.location, 0), 7) # compress to between 0-7 (that is the range we can represent with 3 bits)
+        LocationBits:list[bool] = binary.byte_to_bits(LocationToUse)
+        AllBits.append(LocationBits[5])
+        AllBits.append(LocationBits[6])
+        AllBits.append(LocationBits[7])
 
         # populate temperature bits
         TempToUse:int = max(min(self.temperature, 255), 0) # force btween 0-255
@@ -49,6 +60,8 @@ class StandardPacket:
         ECO2_bytes:bytes = max(min(self.ECO2, 65535), 0).to_bytes(2, "little")
         AllBits.extend(binary.byte_to_bits(ECO2_bytes[0]))
         AllBits.extend(binary.byte_to_bits(ECO2_bytes[1]))
+
+        print("AllBits: " + str(len(AllBits)))
         
         # convert all bits to bytes
         ToReturn:bytearray = bytearray()
@@ -83,6 +96,14 @@ class StandardPacket:
         AllBits.pop(0)
 
         BitBuffer:list[bool] = []
+
+        # Next 3 are location
+        for _ in range(3):
+            BitBuffer.append(AllBits.pop(0))
+        while len(BitBuffer) < 8: # build it out until it is a full byte
+            BitBuffer.insert(0, False)
+        self.location = binary.bits_to_byte(BitBuffer)
+        BitBuffer.clear()
 
         # Next 8 are temperature
         for _ in range(8):
@@ -120,3 +141,16 @@ class StandardPacket:
         b2 = binary.bits_to_byte(BitBuffer[8:16])
         self.ECO2 = int.from_bytes(bytes([b1, b2]), "little")
         BitBuffer.clear()
+
+sp = StandardPacket()
+sp.location = 3
+sp.temperature = 75
+sp.humidity = 55
+sp.AQI = 4
+sp.TVOC = 4504
+sp.ECO2 = 895
+data = sp.encode()
+
+sp2 = StandardPacket()
+sp2.decode(data)
+print(str(sp2))
