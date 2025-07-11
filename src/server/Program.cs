@@ -94,7 +94,7 @@ namespace HomeAirQuality
 
 		public static void UploadAirQualityReading(int location, int temperature, int humidity, int aqi, int tvoc, int eco2)
 		{
-			string query = "insert into AirQualityReading (Captured, Location, Temperature, Humidity, AQI, TVOC, ECO2) values ('" + DateTime.Now.ToString() + "', " + location.ToString() + ", " + temperature.ToString() + ", " + humidity.ToString() + ", " + aqi.ToString() + ", " + tvoc.ToString() + ", " + eco2.ToString() + ")";
+			string query = "insert into AirQualityReading (Captured, Location, Temperature, Humidity, AQI, TVOC, ECO2) values ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + location.ToString() + ", " + temperature.ToString() + ", " + humidity.ToString() + ", " + aqi.ToString() + ", " + tvoc.ToString() + ", " + eco2.ToString() + ")";
 			Console.WriteLine("Query: " + query);
 			SqlConnection sqlcon = new SqlConnection(new Settings().SQLConnectionString);
 			SqlCommand sqlcmd = new SqlCommand(query, sqlcon);
