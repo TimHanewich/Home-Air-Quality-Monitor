@@ -2,7 +2,6 @@ print("Hello! Home Air Quality Monitor (Receiver) booting...")
 
 print("Loading dependencies...")
 import machine
-import DataPackets
 import time
 import HC12
 import sys
