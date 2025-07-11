@@ -21,7 +21,9 @@ namespace TestingSerial
 					{
 						Console.Write(b.ToString() + ", ");
 					}
-					Console.WriteLine();
+					Console.Write(" = ");
+					string AsTxt = System.Text.Encoding.UTF8.GetString(buffer);
+					Console.WriteLine(AsTxt);
 				}
 				else
 				{
