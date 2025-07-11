@@ -77,8 +77,6 @@ namespace TestingSerial
 								{
 									AnsiConsole.MarkupLine("\t[red]Unable to parse data! Err msg: " + ex.Message + "[/]");
 								}
-
-								AnsiConsole.MarkupLine("\tUploading data...");
 							}
 							else
 							{
@@ -95,7 +93,7 @@ namespace TestingSerial
 
 		public static void UploadAirQualityReading(int location, int temperature, int humidity, int aqi, int tvoc, int eco2)
 		{
-			string query = "insert into AirQualityReading (Captured, Location, Temperature, Humidity, AQI, TVOC, ECO2) values (" + DateTime.Now.ToString() + ", " + location.ToString() + ", " + temperature.ToString() + ", " + humidity.ToString() + ", " + aqi.ToString() + ", " + tvoc.ToString() + ", " + eco2.ToString() + ")";
+			string query = "insert into AirQualityReading (Captured, Location, Temperature, Humidity, AQI, TVOC, ECO2) values ('" + DateTime.Now.ToString() + "', " + location.ToString() + ", " + temperature.ToString() + ", " + humidity.ToString() + ", " + aqi.ToString() + ", " + tvoc.ToString() + ", " + eco2.ToString() + ")";
 			SqlConnection sqlcon = new SqlConnection(new Settings().SQLConnectionString);
 			SqlCommand sqlcmd = new SqlCommand(query, sqlcon);
 			sqlcon.Open();
