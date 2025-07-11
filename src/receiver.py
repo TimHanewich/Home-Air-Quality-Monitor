@@ -18,7 +18,7 @@ def FATAL() -> None:
 
 # Set up HC-12
 print("Setting up HC-12 transceiver...")
-uart = machine.UART(0, tx=machine.Pin(17), rx=machine.Pin(16), baudrate=9600)
+uart = machine.UART(0, tx=machine.Pin(16), rx=machine.Pin(17), baudrate=9600)
 hc12 = HC12.HC12(uart, 15) # with set pin (GP15)
 hc12_pulsed:bool = False
 for a in range(3): # try 3 times
