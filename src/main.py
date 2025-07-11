@@ -126,7 +126,7 @@ while True:
     ECO2:int = 0
     print("Capturing ENS160 data...")
     try:
-        AQI = ens.AQI
+        AQI = ens.AQI["value"]
         TVOC = ens.TVOC
         ECO2 = ens.ECO2
         print("AQI: " + str(AQI) + ", TVOC: " + str(TVOC) + ", ECO2: " + str(ECO2))
