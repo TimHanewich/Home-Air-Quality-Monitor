@@ -1,6 +1,6 @@
 using System;
 
-namespace TestingSerial
+namespace HomeAirQuality
 {
     public class Settings
     {

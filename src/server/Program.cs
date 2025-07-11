@@ -5,7 +5,7 @@ using Spectre.Console;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 
-namespace TestingSerial
+namespace HomeAirQuality
 {
 	public class Program
 	{
