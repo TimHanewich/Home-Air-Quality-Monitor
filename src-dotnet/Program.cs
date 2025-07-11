@@ -50,14 +50,24 @@ namespace TestingSerial
 					//Convert to text
 					string AsTxt = System.Text.Encoding.UTF8.GetString(buffer);
 
-					//Print as text
-					if (AsTxt.StartsWith("{") && AsTxt.EndsWith("}")) //I developed the code on the Pico so where every actual data packet will be as JSON
+					//Split into lines
+					string[] lines = AsTxt.Split(Environment.NewLine);
+
+					//Handle each line separately
+					foreach (string l in lines)
 					{
-						AnsiConsole.MarkupLine("[blue][bold]" + AsTxt + "[/]");
-					}
-					else
-					{
-						AnsiConsole.MarkupLine("[gray]" + AsTxt + "[/]");
+						string line = l.Replace("\r", "").Replace("\n", ""); //Ensure new lines are stripped out at this point
+						if (line != string.Empty)
+						{
+							if (line.StartsWith("{") && line.EndsWith("}")) //I developed the code on the Pico so where every actual data packet will be as JSON
+							{
+								AnsiConsole.MarkupLine("[blue][bold]" + line + "[/][/]");
+							}
+							else
+							{
+								AnsiConsole.MarkupLine("[gray][italic]" + line + "[/][/]");
+							}
+						}
 					}
 				}
 				System.Threading.Tasks.Task.Delay(250).Wait();
