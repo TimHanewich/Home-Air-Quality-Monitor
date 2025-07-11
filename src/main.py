@@ -7,6 +7,7 @@ import time
 import HC12
 import ENS160
 import dht
+import DataPackets
 
 # set up LED with fatal sequences
 print("Setting up Pico LED...")
@@ -98,3 +99,56 @@ except Exception as ex:
     print("Failed reading data from ENS-160! Failing. Msg: " + str(ex))
     FATAL()
 
+# continuously transmit data!
+print("Entering infinite transmit loop...")
+OnLoop:int = 1
+time.sleep(1.0)
+while True:
+
+    print("Beginning sample capture # " + str(OnLoop) + "... ")
+
+    # Capture Data: DHT22
+    TemperatureF:int = 0
+    Humidity:int = 0
+    print("Capturing DHT22 data...")
+    try:
+        dht22.measure()
+        TemperatureF = int((dht22.temperature() * (9/5)) + 32)
+        Humidity = int(dht22.humidity())
+        print("Temperature, F: " + str(TemperatureF))
+        print("Humidity, RH: " + str(Humidity) + "%")
+    except Exception as ex:
+        print("DHT22 data capture failed! Msg: " + str(ex))
+
+    # Capture Data: ENS160
+    AQI:int = 0
+    TVOC:int = 0
+    ECO2:int = 0
+    print("Capturing ENS160 data...")
+    try:
+        AQI = ens.AQI
+        TVOC = ens.TVOC
+        ECO2 = ens.ECO2
+        print("AQI: " + str(AQI) + ", TVOC: " + str(TVOC) + ", ECO2: " + str(ECO2))
+    except Exception as ex:
+        print("ENS160 data capture failed! Msg: " + str(ex))
+
+    # transmit the data
+    packet:DataPackets.StandardPacket = DataPackets.StandardPacket()
+    packet.temperature = TemperatureF
+    packet.humidity = Humidity
+    packet.AQI = AQI
+    packet.TVOC = TVOC
+    packet.ECO2 = ECO2
+    payload:bytes = packet.encode()
+    print("Data packet of " + str(len(payload)) + " bytes prepared for sending!")
+    print("Sending " + str(len(payload)) + " bytes...")
+    try:
+        hc12.send(payload)
+    except Exception as ex:
+        print("Failure while sending data via HC-12! Msg: " + str(ex))
+
+    # wait
+    WaitTime:int = 15
+    print("Waiting " + str(WaitTime) + " seconds until next cycle...")
+    time.sleep(WaitTime)
