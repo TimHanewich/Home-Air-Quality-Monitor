@@ -21,11 +21,12 @@ namespace TestingSerial
 
 					//Print as text
 					string AsTxt = System.Text.Encoding.UTF8.GetString(buffer);
-					Console.WriteLine(AsTxt);
+					Console.Write(AsTxt);
 				}
 				else
 				{
-					Console.WriteLine("No bytes available!");
+					//Can write a message here but I commented out to ensure ONLY received data is being printed to the terminal
+					//Console.WriteLine("No bytes available!");
 				}
 
 				System.Threading.Tasks.Task.Delay(1000).Wait();
