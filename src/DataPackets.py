@@ -221,14 +221,3 @@ class MessagePacket:
             MsgBytes.append(binary.bits_to_byte(BitBuffer)) # convert to a byte and but in an array of message bytes
             BitBuffer.clear() # clear
         self.message = bytes(MsgBytes).decode()
-
-MsgPack = MessagePacket()
-MsgPack.location = 3
-MsgPack.message = "Yo my nameis dj dfk dlkjf fdf f df df 9j9fj 9jf 8hjdf sd92cd ud8 j89sdj 8js89dhj 98hs89dh 8hs9dn ushdjh ksd sd sd8h"
-data = MsgPack.encode()
-print(str(len(data)) + " bytes")
-print(data)
-
-mp2 = MessagePacket()
-mp2.decode(data)
-print(str(mp2))
