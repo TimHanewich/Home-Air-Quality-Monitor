@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.IO.Ports" Version="9.0.7" />
   </ItemGroup>
 
