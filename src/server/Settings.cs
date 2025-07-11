@@ -9,7 +9,7 @@ namespace TestingSerial
 
         public Settings()
         {
-            SerialID = "<SERIAL ID HERE>";
+            SerialID = "<SERIAL PORT HERE>";
             SQLConnectionString = "<SQL CONNECTION STRING HERE>";
         }
     }
