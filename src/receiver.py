@@ -80,7 +80,7 @@ while True:
             sp.decode(NewData)
 
             # create payload to return via serial
-            payload:dict = {"temperature": sp.temperature, "humidity": sp.humidity, "aqi": sp.AQI, "tvoc": sp.TVOC, "eco2": sp.ECO2}
+            payload:dict = {"location": sp.location, "temperature": sp.temperature, "humidity": sp.humidity, "aqi": sp.AQI, "tvoc": sp.TVOC, "eco2": sp.ECO2}
 
             # print it
             print(json.dumps(payload))
