@@ -3,6 +3,7 @@ using System.IO.Ports;
 using Spectre;
 using Spectre.Console;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json.Linq;
 
 namespace TestingSerial
 {
@@ -63,6 +64,28 @@ namespace TestingSerial
 							if (line.StartsWith("{") && line.EndsWith("}")) //I developed the code on the Pico so where every actual data packet will be as JSON
 							{
 								AnsiConsole.MarkupLine("[blue][bold]" + line + "[/][/]");
+
+								//Strip out data
+								try
+								{
+									AnsiConsole.MarkupLine("\tParsing data...");
+									JObject jo = JObject.Parse(line);
+									int location = jo["location"].Value<int>();
+									int temperature = jo["temperature"].Value<int>();
+									int humidity = jo["humidity"].Value<int>();
+									int aqi = jo["aqi"].Value<int>();
+									int tvoc = jo["tvoc"].Value<int>();
+									int eco2 = jo["eco2"].Value<int>();
+									AnsiConsole.Markup("\tUploading data... ");
+									UploadAirQualityReading(location, temperature, humidity, aqi, tvoc, eco2);
+									AnsiConsole.MarkupLine("[green]Data upload successful![/]");
+								}
+								catch (Exception ex)
+								{
+									AnsiConsole.MarkupLine("\t[red]Unable to parse data! Err msg: " + ex.Message + "[/]");
+								}
+
+								AnsiConsole.MarkupLine("\tUploading data...");
 							}
 							else
 							{
