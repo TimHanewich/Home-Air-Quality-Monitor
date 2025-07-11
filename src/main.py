@@ -156,6 +156,6 @@ while True:
     print("Waiting " + str(WaitTime) + " seconds until next cycle...")
     led.off() # turn off LED while not recording or sending, while we wait in a downtime
     for i in range(0, WaitTime):
-        print("Collecting sample in " + str(WaitTime - i) + "... ")
+        print("Collecting sample # " + str(OnLoop + 1) + " in " + str(WaitTime - i) + "... ")
         time.sleep(1.0)
     OnLoop = OnLoop + 1
