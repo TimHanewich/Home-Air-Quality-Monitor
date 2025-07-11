@@ -145,6 +145,7 @@ while True:
     print("Sending " + str(len(payload)) + " bytes...")
     try:
         hc12.send(payload)
+        print("Data packet sent successfully!")
     except Exception as ex:
         print("Failure while sending data via HC-12! Msg: " + str(ex))
 
