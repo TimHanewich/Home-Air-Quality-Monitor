@@ -5,6 +5,7 @@ import machine
 import DataPackets
 import time
 import HC12
+import json
 
 # Set up LED
 led = machine.Pin("LED", machine.Pin.OUT)
@@ -78,8 +79,11 @@ while True:
             sp:DataPackets.StandardPacket = DataPackets.StandardPacket()
             sp.decode(NewData)
 
+            # create payload to return via serial
+            payload:dict = {"temperature": sp.temperature, "humidity": sp.humidity, "aqi": sp.AQI, "tvoc": sp.TVOC, "eco2": sp.ECO2}
+
             # print it
-            print("Temperature: " + str(sp.temperature) + ", Humidity: " + str(sp.humidity) + ", AQI: " + str(sp.AQI) + ", TVOC: " + str(sp.TVOC) + ", ECO2: " + str(sp.ECO2))
+            print(json.dumps(payload))
     
         else:
             print("Data payload of " + str(len(NewData)) + " not recognized as an understood packet type!")
