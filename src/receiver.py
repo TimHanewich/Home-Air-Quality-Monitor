@@ -67,6 +67,7 @@ while True:
     if len(NewData) == 0:
         print("No new data!")
     else:
+        led.on()
         print(str(len(NewData)) + " new bytes received!")
 
         # is it a standard packet?
@@ -83,6 +84,8 @@ while True:
         else:
             print("Data payload of " + str(len(NewData)) + " not recognized as an understood packet type!")
             print("Data received: " + str(NewData))
+
+        led.off()
 
     # wait
     WaitTime:int = 3
