@@ -153,3 +153,4 @@ while True:
     WaitTime:int = 15
     print("Waiting " + str(WaitTime) + " seconds until next cycle...")
     time.sleep(WaitTime)
+    OnLoop = OnLoop + 1
