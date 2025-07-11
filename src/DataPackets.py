@@ -141,16 +141,3 @@ class StandardPacket:
         b2 = binary.bits_to_byte(BitBuffer[8:16])
         self.ECO2 = int.from_bytes(bytes([b1, b2]), "little")
         BitBuffer.clear()
-
-sp = StandardPacket()
-sp.location = 3
-sp.temperature = 75
-sp.humidity = 55
-sp.AQI = 4
-sp.TVOC = 4504
-sp.ECO2 = 895
-data = sp.encode()
-
-sp2 = StandardPacket()
-sp2.decode(data)
-print(str(sp2))
