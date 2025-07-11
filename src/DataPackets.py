@@ -74,7 +74,7 @@ class StandardPacket:
                 BitBuffer.append(False)
             ToReturn.append(binary.bits_to_byte(BitBuffer))
 
-        return ToReturn
+        return bytes(ToReturn)
     
     def decode(self, data:bytes) -> None:
         """Decode a data packet."""
@@ -187,7 +187,7 @@ class MessagePacket:
                 BitBuffer.append(False)
             ToReturn.append(binary.bits_to_byte(BitBuffer))
 
-        return ToReturn
+        return bytes(ToReturn)
     
     def decode(self, data:bytes) -> None:
         """Decode a byte packet."""
