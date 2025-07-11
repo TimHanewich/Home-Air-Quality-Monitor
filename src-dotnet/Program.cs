@@ -2,6 +2,7 @@ using System;
 using System.IO.Ports;
 using Spectre;
 using Spectre.Console;
+using Microsoft.Data.SqlClient;
 
 namespace TestingSerial
 {
@@ -74,6 +75,16 @@ namespace TestingSerial
 			}
 
 			//Should close the connection at the end but that is done automatically when Ctrl+C happenss
+		}
+
+		public static void UploadAirQualityReading(int location, int temperature, int humidity, int aqi, int tvoc, int eco2)
+		{
+			string query = "insert into AirQualityReading (Location, Temperature, Humidity, AQI, TVOC, ECO2) values (" + location.ToString() + ", " + temperature.ToString() + ", " + humidity.ToString() + ", " + aqi.ToString() + ", " + tvoc.ToString() + ", " + eco2.ToString() + ")";
+			SqlConnection sqlcon = new SqlConnection(new Settings().SQLConnectionString);
+			SqlCommand sqlcmd = new SqlCommand(query, sqlcon);
+			sqlcon.Open();
+			sqlcmd.ExecuteNonQuery();
+			sqlcon.Close();
 		}
 	}
 }
