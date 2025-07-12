@@ -33,6 +33,10 @@ namespace AirQualityMonitor
             }
 
 
+            //Determine EST time - this will be used in several places later
+            TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime NowEstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, EST);
+
             //Create SQL connection
             SqlConnection sqlcon = new SqlConnection(ConStr);
             sqlcon.Open();
@@ -42,8 +46,7 @@ namespace AirQualityMonitor
             List<int> UniqueLocations = new List<int>();
             try
             {
-                TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                DateTime NowEstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, EST);
+                
                 string query = "select distinct Location from AirQualityReading where Captured > '" + NowEstTime.AddMinutes(-60).ToString("yyyy-MM-dd HH:mm:ss") + "'";
                 SqlCommand sqlcmd = new SqlCommand(query, sqlcon);
                 SqlDataReader sdr = sqlcmd.ExecuteReader();
@@ -116,7 +119,7 @@ namespace AirQualityMonitor
                     if (Captured.HasValue)
                     {
                         ThisRecord.Add("captured", Captured);
-                        double SecondsAgo = (DateTime.Now - Captured.Value).TotalSeconds;
+                        double SecondsAgo = (NowEstTime - Captured.Value).TotalSeconds;
                         ThisRecord.Add("secondsAgo", Convert.ToInt32(SecondsAgo));
                     }
                     if (Temperature.HasValue)
