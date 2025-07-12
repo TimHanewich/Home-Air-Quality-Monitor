@@ -118,7 +118,6 @@ namespace AirQualityMonitor
                     ThisRecord.Add("location", location);
                     if (Captured.HasValue)
                     {
-                        ThisRecord.Add("captured", Captured);
                         double SecondsAgo = (NowEstTime - Captured.Value).TotalSeconds;
                         ThisRecord.Add("secondsAgo", Convert.ToInt32(SecondsAgo));
                     }
