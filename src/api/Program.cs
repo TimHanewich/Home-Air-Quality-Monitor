@@ -8,7 +8,7 @@ namespace AirQualityMonitor
         {
             //Set up builder
             var builder = WebApplication.CreateBuilder();
-            builder.WebHost.UseUrls("http://0.0.0.0:4560");
+            builder.WebHost.UseUrls("http://0.0.0.0:6301");
             builder.Services.AddControllers();
 
             //Run the app
