@@ -1,0 +1,6 @@
+@AirQualityMonitor_HostAddress = http://localhost:5219
+
+GET {{AirQualityMonitor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
