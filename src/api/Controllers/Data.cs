@@ -42,7 +42,9 @@ namespace AirQualityMonitor
             List<int> UniqueLocations = new List<int>();
             try
             {
-                string query = "select distinct Location from AirQualityReading where Captured > '" + DateTime.Now.AddMinutes(-60).ToString("yyyy-MM-dd HH:mm:ss") + "'";
+                TimeZoneInfo EST = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                DateTime NowEstTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, EST);
+                string query = "select distinct Location from AirQualityReading where Captured > '" + NowEstTime.AddMinutes(-60).ToString("yyyy-MM-dd HH:mm:ss") + "'";
                 SqlCommand sqlcmd = new SqlCommand(query, sqlcon);
                 SqlDataReader sdr = sqlcmd.ExecuteReader();
                 while (sdr.Read())
