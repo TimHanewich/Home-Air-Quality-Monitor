@@ -18,9 +18,16 @@ namespace HomeAirQuality
 		{
 			AnsiConsole.MarkupLine("[bold][blue]Welcome![/][/]");
 
+			//Ask what serial port
+			AnsiConsole.WriteLine("What is the serial port of the radio receiver?");
+			AnsiConsole.WriteLine("On Windows this would be something like 'COM6' or 'COM8'");
+			AnsiConsole.WriteLine("On Linux this would be something like '/dev/ttyACM0' or '/dev/ttyUSB0'");
+			Console.WriteLine();
+			string spID = AnsiConsole.Ask<string>("Serial Port > ");
+
 			//Open
-			AnsiConsole.Markup("Opening serial port " + new Settings().SerialID + "... ");
-			SerialPort sp = new SerialPort(new Settings().SerialID, 115200);
+			AnsiConsole.Markup("Opening serial port " + spID + "... ");
+			SerialPort sp = new SerialPort(spID, 115200);
 			sp.DtrEnable = true; //must be set to true for the Pico to know to start transmiting data. If you use the serial module in Python, that module sets this automatically!
 			try
 			{
