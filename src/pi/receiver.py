@@ -77,13 +77,22 @@ while True:
 
             # decode it
             sp:DataPackets.StandardPacket = DataPackets.StandardPacket()
-            sp.decode(NewData)
+            try:
+                print("Now decoding standard packet...")
+                sp.decode(NewData)
+                print("StandardPacket decoded successfully!")
+            except Exception as ex:
+                print("Failed to decode bytes as StandardPacket! Msg: " + str(ex))
+                sp = None
 
-            # create payload to return via serial
-            payload:dict = {"location": sp.location, "temperature": sp.temperature, "humidity": sp.humidity, "aqi": sp.AQI, "tvoc": sp.TVOC, "eco2": sp.ECO2}
+            # now print the payload over serial, if we have it
+            if sp != None:
 
-            # print it
-            print(json.dumps(payload))
+                # create payload to return via serial
+                payload:dict = {"location": sp.location, "temperature": sp.temperature, "humidity": sp.humidity, "aqi": sp.AQI, "tvoc": sp.TVOC, "eco2": sp.ECO2}
+
+                # print it
+                print(json.dumps(payload))
     
         else:
             print("Data payload of " + str(len(NewData)) + " not recognized as an understood packet type!")
